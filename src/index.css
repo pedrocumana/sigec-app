@@ -136,9 +136,9 @@ tbody tr:hover { background: var(--surface-2); }
 
 @media print {
   body * { visibility: hidden; }
-  #print-area, #print-area *, #print-informe-area, #print-informe-area * { visibility: visible; }
+  #print-area, #print-area *, #print-informe-area, #print-informe-area *, #print-contabilidad-area, #print-contabilidad-area * { visibility: visible; }
   @page { size: Letter portrait; margin: 10mm; }
-  #print-area, #print-informe-area { display: block; position: absolute; top: 0; left: 0; width: 100%; padding: 0; margin: 0; }
+  #print-area, #print-informe-area, #print-contabilidad-area { display: block; position: absolute; top: 0; left: 0; width: 100%; padding: 0; margin: 0; }
   #print-area { font-family: Arial, sans-serif; font-size: 9pt; color: #000; }
   #print-area .recipe-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); width: 100%; height: 170mm; }
   #print-area .recipe-half { position: relative; display: flex; flex-direction: column; min-width: 0; height: 170mm; padding: 0 10px 8px; overflow: hidden; }
@@ -154,10 +154,26 @@ tbody tr:hover { background: var(--surface-2); }
   @page recipe { size: Letter landscape; margin: 10mm; }
   #print-informe-area { page: report; font-family: Arial, sans-serif; font-size: 12pt; color: #000; }
   @page report { size: Letter portrait; margin: 10mm; }
-  #print-informe-area .informe-header { text-align: center; line-height: 1.35; padding-bottom: 16px; border-bottom: 1px solid #000; }
-  #print-informe-area .informe-header img { width: 54px; height: 54px; object-fit: contain; display: block; margin: 0 auto 8px; }
+  #print-informe-area .informe-header { text-align: center; font-size: 8pt; line-height: 1.15; padding-bottom: 8px; border-bottom: 1px solid #000; }
+  #print-informe-area .informe-header img { width: 44px; height: 44px; object-fit: contain; display: block; margin: 0 auto 4px; }
   #print-informe-area .informe-meta { margin-top: 24px; line-height: 1.6; }
   #print-informe-area h1 { font-family: Arial, sans-serif; font-size: 16pt; text-align: center; margin: 28px 0 24px; color: #000; }
   #print-informe-area .informe-body { text-align: justify; line-height: 1.6; min-height: 420px; white-space: normal; }
-  #print-informe-area .informe-footer { text-align: center; line-height: 1.5; margin-top: 24px; page-break-inside: avoid; }
+  #print-informe-area .informe-footer { text-align: center; line-height: 1.3; margin-top: 8px; page-break-inside: avoid; }
+  @page accounting { size: Letter portrait; margin: 12mm; }
+  #print-contabilidad-area { page: accounting; font-family: Arial, sans-serif; font-size: 9pt; line-height: 1.35; color: #000; }
+  #print-contabilidad-area .contabilidad-header { display: flex; align-items: center; justify-content: center; gap: 14px; padding-bottom: 10px; border-bottom: 1px solid #222; text-align: center; }
+  #print-contabilidad-area .contabilidad-header img { width: 64px; height: 64px; object-fit: contain; }
+  #print-contabilidad-area .contabilidad-header h1 { margin: 0 0 4px; font-size: 16pt; }
+  #print-contabilidad-area > h2 { margin: 16px 0 8px; text-align: center; font-size: 13pt; }
+  #print-contabilidad-area .contabilidad-periodo { margin-bottom: 12px; text-align: center; font-weight: 600; }
+  #print-contabilidad-area table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+  #print-contabilidad-area th, #print-contabilidad-area td { padding: 5px 6px; border: 1px solid #777; vertical-align: top; }
+  #print-contabilidad-area th { background: #eee !important; color: #000; text-align: left; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #print-contabilidad-area .amount { text-align: right; white-space: nowrap; }
+  #print-contabilidad-area .empty { padding: 12px; text-align: center; }
+  #print-contabilidad-area .contabilidad-resumen { margin-top: 18px; page-break-inside: avoid; break-inside: avoid; }
+  #print-contabilidad-area .contabilidad-resumen h3 { margin: 0 0 8px; font-size: 11pt; }
+  #print-contabilidad-area .contabilidad-resumen-tabla { max-width: 125mm; margin-left: auto; }
+  #print-contabilidad-area .contabilidad-total { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; padding: 10px 8px; border-top: 2px solid #222; font-size: 10pt; }
 }

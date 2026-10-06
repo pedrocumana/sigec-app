@@ -5,22 +5,28 @@ import Topbar from '../components/topbar';
 import { formatDate } from '../lib/dateUtils';
 
 const EMPTY_USER = { nombre: '', email: '', password: '', rol: 'secretaria' };
+const EMPTY_CONFIG = {
+  tasa_bcv: 36.5,
+  medico_nombre: '',
+  especialidad: '',
+  mpps: '',
+  colegio_medicos: '',
+  rif: '',
+  direccion_clinica: ''
+};
 
 export default function Configuracion() {
   const { isMedico } = useAuth();
-  const [config, setConfig] = useState({
-    tasa_bcv: 36.50,
-    medico_nombre: '',
-    especialidad: '',
-    mpps: '',
-    colegio_medicos: '',
-    rif: '',
-    direccion_clinica: ''
-  });
+  const [config, setConfig] = useState(EMPTY_CONFIG);
   const [usuarios, setUsuarios] = useState([]);
   const [newUser, setNewUser] = useState(EMPTY_USER);
   const [userError, setUserError] = useState('');
   const [isCreatingUser, setIsCreatingUser] = useState(false);
+  const [isSavingConfig, setIsSavingConfig] = useState(false);
+
+  const updateConfigField = (field, value) => {
+    setConfig((prev) => ({ ...prev, [field]: value }));
+  };
 
   useEffect(() => {
     fetchConfig();
@@ -37,8 +43,24 @@ export default function Configuracion() {
   }, []);
 
   async function fetchConfig() {
-    const { data } = await supabase.from('configuracion').select('*').eq('id', 1).single();
-    if (data) setConfig(data);
+    const { data, error } = await supabase
+      .from('configuracion')
+      .select('*')
+      .eq('id', 1)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error cargando configuración:', error);
+      return;
+    }
+
+    if (data) {
+      setConfig({
+        ...EMPTY_CONFIG,
+        ...data,
+        tasa_bcv: Number(data.tasa_bcv ?? EMPTY_CONFIG.tasa_bcv)
+      });
+    }
   }
 
   async function fetchUsuarios() {
@@ -78,11 +100,35 @@ export default function Configuracion() {
   }
 
   async function handleSave() {
+    const tasaBCV = Number(config.tasa_bcv);
+
+    if (!Number.isFinite(tasaBCV) || tasaBCV <= 0) {
+      alert('La tasa BCV debe ser un valor numérico válido.');
+      return;
+    }
+
+    setIsSavingConfig(true);
+
     const { error } = await supabase.from('configuracion').update({
-      tasa_bcv: config.tasa_bcv
+      tasa_bcv: tasaBCV,
+      medico_nombre: config.medico_nombre?.trim() || EMPTY_CONFIG.medico_nombre,
+      especialidad: config.especialidad?.trim() || EMPTY_CONFIG.especialidad,
+      mpps: config.mpps?.trim() || EMPTY_CONFIG.mpps,
+      colegio_medicos: config.colegio_medicos?.trim() || EMPTY_CONFIG.colegio_medicos,
+      rif: config.rif?.trim() || EMPTY_CONFIG.rif,
+      direccion_clinica: config.direccion_clinica?.trim() || EMPTY_CONFIG.direccion_clinica,
+      updated_at: new Date().toISOString()
     }).eq('id', 1);
 
-    if (!error) alert('Tasa BCV actualizada correctamente.');
+    setIsSavingConfig(false);
+
+    if (error) {
+      console.error('Error actualizando configuración:', error);
+      alert('No se pudo guardar la configuración.');
+      return;
+    }
+
+    alert('Configuración actualizada correctamente.');
   }
 
   return (
@@ -100,10 +146,15 @@ export default function Configuracion() {
               type="number"
               step="0.01"
               value={config.tasa_bcv}
-              onChange={(e) => setConfig({ ...config, tasa_bcv: parseFloat(e.target.value) })}
+              onChange={(e) => updateConfigField('tasa_bcv', Number(e.target.value || 0))}
+              disabled={!isMedico}
             />
           </div>
-          <button className="btn btn-primary" onClick={handleSave}>Actualizar Tasa</button>
+          {isMedico && (
+            <button className="btn btn-primary" onClick={handleSave} disabled={isSavingConfig}>
+              {isSavingConfig ? 'Guardando...' : 'Actualizar Tasa'}
+            </button>
+          )}
         </div>
       </div>
 
@@ -168,25 +219,35 @@ export default function Configuracion() {
           <div className="form-grid">
             <div className="field">
               <label>Médico Titular</label>
-              <input type="text" value={config.medico_nombre} disabled />
+              <input type="text" value={config.medico_nombre} onChange={(e) => updateConfigField('medico_nombre', e.target.value)} disabled={!isMedico} />
             </div>
             <div className="field">
               <label>Especialidad</label>
-              <input type="text" value={config.especialidad} disabled />
+              <input type="text" value={config.especialidad} onChange={(e) => updateConfigField('especialidad', e.target.value)} disabled={!isMedico} />
             </div>
             <div className="field">
               <label>MPPS</label>
-              <input type="text" value={config.mpps} disabled />
+              <input type="text" value={config.mpps} onChange={(e) => updateConfigField('mpps', e.target.value)} disabled={!isMedico} />
             </div>
             <div className="field">
               <label>Colegio de Médicos</label>
-              <input type="text" value={config.colegio_medicos} disabled />
+              <input type="text" value={config.colegio_medicos} onChange={(e) => updateConfigField('colegio_medicos', e.target.value)} disabled={!isMedico} />
+            </div>
+            <div className="field">
+              <label>RIF</label>
+              <input type="text" value={config.rif} onChange={(e) => updateConfigField('rif', e.target.value)} disabled={!isMedico} />
             </div>
             <div className="field span-2">
               <label>Dirección</label>
-              <textarea value={config.direccion_clinica} disabled />
+              <textarea value={config.direccion_clinica} onChange={(e) => updateConfigField('direccion_clinica', e.target.value)} disabled={!isMedico} />
             </div>
           </div>
+
+          {isMedico && (
+            <button className="btn btn-primary" style={{ marginTop: '16px' }} onClick={handleSave} disabled={isSavingConfig}>
+              {isSavingConfig ? 'Guardando cambios...' : 'Guardar configuración'}
+            </button>
+          )}
         </div>
       </div>
     </>
