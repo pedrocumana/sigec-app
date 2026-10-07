@@ -132,12 +132,6 @@ export default function Configuracion() {
 
     const { error } = await supabase.from('configuracion').update({
       tasa_bcv: tasaBCV,
-      medico_nombre: config.medico_nombre?.trim() || EMPTY_CONFIG.medico_nombre,
-      especialidad: config.especialidad?.trim() || EMPTY_CONFIG.especialidad,
-      mpps: config.mpps?.trim() || EMPTY_CONFIG.mpps,
-      colegio_medicos: config.colegio_medicos?.trim() || EMPTY_CONFIG.colegio_medicos,
-      rif: config.rif?.trim() || EMPTY_CONFIG.rif,
-      direccion_clinica: config.direccion_clinica?.trim() || EMPTY_CONFIG.direccion_clinica,
       updated_at: new Date().toISOString()
     }).eq('id', 1);
 
@@ -250,35 +244,30 @@ export default function Configuracion() {
           <div className="form-grid">
             <div className="field">
               <label>Médico Titular</label>
-              <input type="text" value={config.medico_nombre} onChange={(e) => updateConfigField('medico_nombre', e.target.value)} disabled={!isMedico} />
+              <input type="text" value={config.medico_nombre} disabled />
             </div>
             <div className="field">
               <label>Especialidad</label>
-              <input type="text" value={config.especialidad} onChange={(e) => updateConfigField('especialidad', e.target.value)} disabled={!isMedico} />
+              <input type="text" value={config.especialidad} disabled />
             </div>
             <div className="field">
               <label>MPPS</label>
-              <input type="text" value={config.mpps} onChange={(e) => updateConfigField('mpps', e.target.value)} disabled={!isMedico} />
+              <input type="text" value={config.mpps} disabled />
             </div>
             <div className="field">
               <label>Colegio de Médicos</label>
-              <input type="text" value={config.colegio_medicos} onChange={(e) => updateConfigField('colegio_medicos', e.target.value)} disabled={!isMedico} />
+              <input type="text" value={config.colegio_medicos} disabled />
             </div>
             <div className="field">
               <label>RIF</label>
-              <input type="text" value={config.rif} onChange={(e) => updateConfigField('rif', e.target.value)} disabled={!isMedico} />
+              <input type="text" value={config.rif} disabled />
             </div>
             <div className="field span-2">
               <label>Dirección</label>
-              <textarea value={config.direccion_clinica} onChange={(e) => updateConfigField('direccion_clinica', e.target.value)} disabled={!isMedico} />
+              <textarea value={config.direccion_clinica} disabled />
             </div>
           </div>
 
-          {isMedico && (
-            <button className="btn btn-primary" style={{ marginTop: '16px' }} onClick={handleSave} disabled={isSavingConfig}>
-              {isSavingConfig ? 'Guardando cambios...' : 'Guardar configuración'}
-            </button>
-          )}
         </div>
       </div>
     </>
