@@ -118,6 +118,12 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      <footer className="dashboard-contact" aria-label="Contacto del desarrollador">
+        <span>Desarrollado por <strong>Licdo. Pedro Vicente Cumana</strong></span>
+        <a href="tel:+584160941582">(+58) 4160941582</a>
+        <a href="mailto:pedroc150470@gmail.com">pedroc150470@gmail.com</a>
+      </footer>
     </div>
   );
 }

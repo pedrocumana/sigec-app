@@ -89,6 +89,10 @@ nav.nav-list { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 .dashboard-brand img { width: 58px; height: 58px; object-fit: contain; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); padding: 4px; }
 .dashboard-brand h1 { font-size: 24px; }
 .dashboard-brand p { color: var(--ink-soft); font-size: 13px; margin-top: 3px; }
+.dashboard-contact { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 6px 16px; margin-top: 22px; padding: 12px 8px 0; border-top: 1px solid var(--border); color: var(--ink-soft); font-size: 11.5px; }
+.dashboard-contact strong { color: var(--ink-soft); font-weight: 600; }
+.dashboard-contact a { color: var(--ink-soft); text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 2px; transition: color .15s, text-decoration-color .15s; }
+.dashboard-contact a:hover { color: var(--primary); text-decoration-color: currentColor; }
 
 .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-bottom: 26px; }
 .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 18px 20px; box-shadow: var(--shadow-1); position: relative; }
@@ -136,21 +140,21 @@ tbody tr:hover { background: var(--surface-2); }
 
 @media print {
   body * { visibility: hidden; }
-  #print-area, #print-area *, #print-informe-area, #print-informe-area *, #print-contabilidad-area, #print-contabilidad-area * { visibility: visible; }
+  #print-area, #print-area *, #print-recipe-area, #print-recipe-area *, #print-informe-area, #print-informe-area *, #print-contabilidad-area, #print-contabilidad-area * { visibility: visible; }
   @page { size: Letter portrait; margin: 10mm; }
-  #print-area, #print-informe-area, #print-contabilidad-area { display: block; position: absolute; top: 0; left: 0; width: 100%; padding: 0; margin: 0; }
-  #print-area { font-family: Arial, sans-serif; font-size: 9pt; color: #000; }
-  #print-area .recipe-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); width: 100%; height: 170mm; }
-  #print-area .recipe-half { position: relative; display: flex; flex-direction: column; min-width: 0; height: 170mm; padding: 0 10px 8px; overflow: hidden; }
-  #print-area .recipe-half + .recipe-half { border-left: 1px solid #000; }
-  #print-area .recipe-header { display: flex; align-items: flex-start; gap: 8px; min-height: 54px; padding-bottom: 7px; border-bottom: 1px solid #000; text-align: center; line-height: 1.25; }
-  #print-area .recipe-header img { width: 48px; height: 48px; object-fit: contain; flex: 0 0 48px; }
-  #print-area .recipe-header div { flex: 1; }
-  #print-area h2 { font-family: Arial, sans-serif; font-size: 11pt; text-align: center; margin: 10px 0 8px; color: #000; }
-  #print-area .recipe-patient { line-height: 1.4; }
-  #print-area .recipe-content { flex: 1; text-align: justify; white-space: normal; line-height: 1.45; margin-top: 12px; }
-  #print-area .recipe-footer { margin-top: auto; padding-top: 10px; border-top: 1px solid #000; text-align: center; font-size: 9pt; line-height: 1.25; }
-  #print-area { page: recipe; }
+  #print-area, #print-recipe-area, #print-informe-area, #print-contabilidad-area { display: block; position: absolute; top: 0; left: 0; width: 100%; padding: 0; margin: 0; }
+  #print-recipe-area { font-family: Arial, sans-serif; font-size: 9pt; color: #000; }
+  #print-recipe-area .recipe-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); width: 100%; height: 170mm; }
+  #print-recipe-area .recipe-half { position: relative; display: flex; flex-direction: column; min-width: 0; height: 170mm; padding: 0 10px 8px; overflow: hidden; }
+  #print-recipe-area .recipe-half + .recipe-half { border-left: 1px solid #000; }
+  #print-recipe-area .recipe-header { display: flex; align-items: flex-start; gap: 8px; min-height: 54px; padding-bottom: 7px; border-bottom: 1px solid #000; text-align: center; line-height: 1.25; }
+  #print-recipe-area .recipe-header img { width: 48px; height: 48px; object-fit: contain; flex: 0 0 48px; }
+  #print-recipe-area .recipe-header div { flex: 1; }
+  #print-recipe-area h2 { font-family: Arial, sans-serif; font-size: 11pt; text-align: center; margin: 10px 0 8px; color: #000; }
+  #print-recipe-area .recipe-patient { line-height: 1.4; }
+  #print-recipe-area .recipe-content { flex: 1; text-align: justify; white-space: normal; line-height: 1.45; margin-top: 12px; }
+  #print-recipe-area .recipe-footer { margin-top: auto; padding-top: 10px; border-top: 1px solid #000; text-align: center; font-size: 9pt; line-height: 1.25; }
+  #print-recipe-area { page: recipe; }
   @page recipe { size: Letter landscape; margin: 10mm; }
   #print-informe-area { page: report; font-family: Arial, sans-serif; font-size: 12pt; color: #000; }
   @page report { size: Letter portrait; margin: 10mm; }

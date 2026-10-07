@@ -23,6 +23,7 @@ export default function Configuracion() {
   const [userError, setUserError] = useState('');
   const [isCreatingUser, setIsCreatingUser] = useState(false);
   const [isSavingConfig, setIsSavingConfig] = useState(false);
+  const [updatingUserId, setUpdatingUserId] = useState('');
 
   const updateConfigField = (field, value) => {
     setConfig((prev) => ({ ...prev, [field]: value }));
@@ -64,12 +65,32 @@ export default function Configuracion() {
   }
 
   async function fetchUsuarios() {
-    const { data, error } = await supabase.from('profiles').select('id, nombre, rol, created_at').order('nombre', { ascending: true });
+    const { data, error } = await supabase.from('profiles').select('id, nombre, rol, is_active, created_at').order('nombre', { ascending: true });
     if (error) {
       console.error('Error cargando usuarios:', error);
       return;
     }
     setUsuarios(data || []);
+  }
+
+  async function handleToggleUserAccess(usuario) {
+    const nextActive = usuario.is_active === false;
+    const actionLabel = nextActive ? 'habilitar' : 'inhabilitar';
+    if (!window.confirm(`¿Confirmas ${actionLabel} el acceso de ${usuario.nombre}? Sus registros históricos se conservarán.`)) return;
+
+    setUpdatingUserId(usuario.id);
+    const { data, error } = await supabase.functions.invoke('manage-user-access', {
+      body: { userId: usuario.id, active: nextActive }
+    });
+
+    if (error || data?.error) {
+      console.error('Error actualizando acceso del usuario:', error || data.error);
+      alert(data?.error || error?.message || 'No se pudo actualizar el acceso del usuario.');
+    } else {
+      await fetchUsuarios();
+      alert(nextActive ? 'Acceso habilitado correctamente.' : 'Usuario inhabilitado. Su historial se conserva.');
+    }
+    setUpdatingUserId('');
   }
 
   async function handleCreateUser() {
@@ -195,13 +216,23 @@ export default function Configuracion() {
 
             <div className="table-scroll" style={{ marginTop: '24px' }}>
               <table>
-                <thead><tr><th>Nombre</th><th>Rol</th><th>Creado</th></tr></thead>
+                <thead><tr><th>Nombre</th><th>Rol</th><th>Estado</th><th>Creado</th><th>Acceso</th></tr></thead>
                 <tbody>
                   {usuarios.map((usuario) => (
                     <tr key={usuario.id}>
                       <td>{usuario.nombre}</td>
                       <td>{usuario.rol === 'medico' ? 'Médico' : 'Secretaria'}</td>
+                      <td>{usuario.is_active === false ? 'Inhabilitado' : 'Activo'}</td>
                       <td>{formatDate(usuario.created_at)}</td>
+                      <td>
+                        <button
+                          className={`btn btn-sm ${usuario.is_active === false ? 'btn-ok' : 'btn-ghost'}`}
+                          onClick={() => handleToggleUserAccess(usuario)}
+                          disabled={updatingUserId === usuario.id}
+                        >
+                          {updatingUserId === usuario.id ? 'Actualizando...' : usuario.is_active === false ? 'Habilitar' : 'Inhabilitar'}
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

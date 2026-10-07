@@ -350,8 +350,8 @@ export default function PacienteDetalle() {
     `;
     const recipeFooter = '<div class="recipe-footer">telf: 0412-0864084 -- Instagram: dr.leoferinternista -- tiktok: leonelfernandezgonzalez1</div>';
 
-    const printArea = document.getElementById('print-area') || document.createElement('div');
-    printArea.id = 'print-area';
+    const printArea = document.getElementById('print-recipe-area') || document.createElement('div');
+    printArea.id = 'print-recipe-area';
     printArea.innerHTML = `
       <div class="recipe-columns">
         <section class="recipe-half">

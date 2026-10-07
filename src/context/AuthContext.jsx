@@ -93,6 +93,14 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
+      if (data?.is_active === false) {
+        setProfile(null);
+        setUser(null);
+        // Defer the auth call so it does not run inside Supabase's auth-state callback lock.
+        setTimeout(() => { supabase.auth.signOut(); }, 0);
+        return;
+      }
+
       setProfile(data ?? null);
     } catch (err) {
       console.error('Fallo al cargar perfil:', err);
