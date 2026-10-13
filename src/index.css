@@ -85,6 +85,12 @@ nav.nav-list { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 #main-wrap { min-width: 0; display: flex; flex-direction: column; }
 #topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; }
 #main-content { padding: 28px 32px 60px 32px; flex: 1; }
+.help-page { display: flex; flex-direction: column; gap: 18px; min-height: calc(100vh - 88px); }
+.help-page-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.help-page-heading { display: flex; align-items: center; gap: 12px; color: var(--primary); }
+.help-page-heading h1 { font-size: 23px; }
+.help-page-heading p { margin-top: 4px; color: var(--ink-soft); font-size: 13px; }
+.help-manual-frame { width: 100%; min-height: 650px; height: calc(100vh - 190px); border: 1px solid var(--border); border-radius: var(--radius-m); background: #fff; }
 .dashboard-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
 .dashboard-brand img { width: 58px; height: 58px; object-fit: contain; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); padding: 4px; }
 .dashboard-brand h1 { font-size: 24px; }

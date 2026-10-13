@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Users, Calendar, Receipt, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Calendar, Receipt, Settings, LifeBuoy, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import LogoMark from './LogoMark';
 
@@ -46,6 +46,10 @@ export default function Sidebar() {
             <span>Configuración</span>
           </NavLink>
         )}
+        <NavLink to="/ayuda" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <LifeBuoy size={18} />
+          <span>Ayuda</span>
+        </NavLink>
       </nav>
 
       <div className="sidebar-foot">

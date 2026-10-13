@@ -8,6 +8,7 @@ import PacienteDetalle from './pages/PacienteDetalle';
 import Agenda from './pages/Agenda';
 import Pagos from './pages/Pagos';
 import Configuracion from './pages/Configuracion';
+import Ayuda from './pages/Ayuda';
 import Sidebar from './components/sidebar';
 
 function PublicRoute({ children }) {
@@ -51,6 +52,7 @@ export default function App() {
                         <Route path="/agenda" element={<Agenda />} />
                         <Route path="/pagos" element={<Pagos />} />
                         <Route path="/configuracion" element={<Configuracion />} />
+                        <Route path="/ayuda" element={<Ayuda />} />
                       </Routes>
                     </div>
                   </div>
