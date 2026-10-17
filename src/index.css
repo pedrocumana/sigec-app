@@ -147,6 +147,7 @@ tbody tr:hover { background: var(--surface-2); }
 @media print {
   body * { visibility: hidden; }
   #print-area, #print-area *, #print-recipe-area, #print-recipe-area *, #print-informe-area, #print-informe-area *, #print-contabilidad-area, #print-contabilidad-area * { visibility: visible; }
+  /* Orientación vertical predeterminada para todas las impresiones comunes. */
   @page { size: Letter portrait; margin: 10mm; }
   #print-area, #print-recipe-area, #print-informe-area, #print-contabilidad-area { display: block; position: absolute; top: 0; left: 0; width: 100%; padding: 0; margin: 0; }
   #print-recipe-area { font-family: Arial, sans-serif; font-size: 9pt; color: #000; }
@@ -164,8 +165,9 @@ tbody tr:hover { background: var(--surface-2); }
   @page recipe { size: Letter landscape; margin: 10mm; }
   #print-informe-area { page: report; font-family: Arial, sans-serif; font-size: 12pt; color: #000; }
   @page report { size: Letter portrait; margin: 10mm; }
-  #print-informe-area .informe-header { text-align: center; font-size: 8pt; line-height: 1.15; padding-bottom: 8px; border-bottom: 1px solid #000; }
-  #print-informe-area .informe-header img { width: 44px; height: 44px; object-fit: contain; display: block; margin: 0 auto 4px; }
+  #print-informe-area .informe-header { display: flex; align-items: center; gap: 12px; text-align: center; font-size: 8pt; line-height: 1.15; padding-bottom: 8px; border-bottom: 1px solid #000; }
+  #print-informe-area .informe-header img { width: 68px; height: 68px; object-fit: contain; display: block; flex: 0 0 68px; margin: 0; }
+  #print-informe-area .informe-header-copy { flex: 1; min-width: 0; }
   #print-informe-area .informe-meta { margin-top: 24px; line-height: 1.6; }
   #print-informe-area h1 { font-family: Arial, sans-serif; font-size: 16pt; text-align: center; margin: 28px 0 24px; color: #000; }
   #print-informe-area .informe-body { text-align: justify; line-height: 1.6; min-height: 420px; white-space: normal; }

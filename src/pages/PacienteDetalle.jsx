@@ -182,7 +182,9 @@ export default function PacienteDetalle() {
     printArea.innerHTML = `
       <div class="informe-header">
         <img src="/logo_clinicasp26.jpg" alt="Clínica San Pedro" />
-        ${INFORME_HEADER.map((line) => `<div>${escapeHtml(line)}</div>`).join('')}
+        <div class="informe-header-copy">
+          ${INFORME_HEADER.map((line) => `<div>${escapeHtml(line)}</div>`).join('')}
+        </div>
       </div>
       <div class="informe-meta">
         <div><b>Paciente:</b> ${escapeHtml(informe.paciente_nombre)}</div>
