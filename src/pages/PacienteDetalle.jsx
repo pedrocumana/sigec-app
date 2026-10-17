@@ -6,6 +6,45 @@ import Topbar from '../components/topbar';
 import Modal from '../components/Modal';
 import { ArrowLeft, Plus, Printer } from 'lucide-react';
 import { formatDate } from '../lib/dateUtils';
+import logoUrl from '../../logo_clinicasp26.jpg';
+
+function openPrintWindow({ title, orientation, content, styles }) {
+  const printWindow = window.open('', '_blank');
+
+  if (!printWindow) {
+    alert('El navegador bloqueó la ventana de impresión. Permita las ventanas emergentes para este sitio e inténtelo nuevamente.');
+    return;
+  }
+
+  printWindow.document.open();
+  printWindow.document.write(`<!doctype html>
+    <html lang="es">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>${title}</title>
+        <style>
+          @page { size: Letter ${orientation}; margin: 10mm; }
+          * { box-sizing: border-box; }
+          html, body { margin: 0; padding: 0; color: #000; font-family: Arial, sans-serif; }
+          ${styles}
+          @media print {
+            html, body { width: 100%; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+          }
+        </style>
+      </head>
+      <body>${content}</body>
+    </html>`);
+  printWindow.document.close();
+
+  Promise.all(
+    Array.from(printWindow.document.images, (image) => image.decode().catch(() => undefined))
+  ).then(() => {
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  });
+}
 
 const EXAMEN_FUNCIONAL_FIELDS = [
   ['motivo_consulta', 'Motivo de consulta'],
@@ -177,32 +216,39 @@ export default function PacienteDetalle() {
     .replace(/'/g, '&#039;');
 
   function printInforme(informe) {
-    const printArea = document.getElementById('print-informe-area') || document.createElement('div');
-    printArea.id = 'print-informe-area';
-    printArea.innerHTML = `
-      <div class="informe-header">
-        <img src="/logo_clinicasp26.jpg" alt="Clínica San Pedro" />
+    const content = `
+      <header class="informe-header">
+        <img src="${logoUrl}" alt="Clínica San Pedro" />
         <div class="informe-header-copy">
           ${INFORME_HEADER.map((line) => `<div>${escapeHtml(line)}</div>`).join('')}
         </div>
-      </div>
-      <div class="informe-meta">
+      </header>
+      <section class="informe-meta">
         <div><b>Paciente:</b> ${escapeHtml(informe.paciente_nombre)}</div>
         <div><b>Cédula:</b> ${escapeHtml(informe.paciente_cedula || '—')}</div>
         <div><b>Fecha:</b> ${escapeHtml(formatDate(informe.fecha_emision))}</div>
-      </div>
+      </section>
       <h1>INFORME MEDICO</h1>
-      <div class="informe-body">${escapeHtml(informe.informe).replace(/\n/g, '<br />')}</div>
-      <div class="informe-footer">
+      <main class="informe-body">${escapeHtml(informe.informe).replace(/\n/g, '<br />')}</main>
+      <footer class="informe-footer">
         ${INFORME_FOOTER.map((line) => `<div>${escapeHtml(line)}</div>`).join('')}
-      </div>
+      </footer>
     `;
 
-    if (!document.body.contains(printArea)) document.body.appendChild(printArea);
-    window.print();
-    setTimeout(() => {
-      if (document.body.contains(printArea)) printArea.remove();
-    }, 500);
+    openPrintWindow({
+      title: 'Informe médico',
+      orientation: 'portrait',
+      content,
+      styles: `
+        .informe-header { display: flex; align-items: center; justify-content: flex-start; gap: 14px; padding-bottom: 8px; border-bottom: 1px solid #000; text-align: left; font-size: 8pt; line-height: 1.2; }
+        .informe-header img { display: block; flex: 0 0 90px; width: 90px; height: 90px; object-fit: contain; }
+        .informe-header-copy { flex: 1; min-width: 0; }
+        .informe-meta { margin-top: 24px; line-height: 1.6; }
+        h1 { margin: 28px 0 24px; text-align: center; font-size: 16pt; }
+        .informe-body { min-height: 420px; text-align: justify; line-height: 1.6; }
+        .informe-footer { margin-top: 8px; text-align: center; line-height: 1.3; break-inside: avoid; }
+      `
+    });
   }
 
   async function handleSaveGeneral() {
@@ -352,9 +398,7 @@ export default function PacienteDetalle() {
     `;
     const recipeFooter = '<div class="recipe-footer">telf: 0412-0864084 -- Instagram: dr.leoferinternista -- tiktok: leonelfernandezgonzalez1</div>';
 
-    const printArea = document.getElementById('print-recipe-area') || document.createElement('div');
-    printArea.id = 'print-recipe-area';
-    printArea.innerHTML = `
+    const content = `
       <div class="recipe-columns">
         <section class="recipe-half">
           ${recipeHeader}
@@ -373,16 +417,24 @@ export default function PacienteDetalle() {
       </div>
     `;
 
-    if (!document.body.contains(printArea)) {
-      document.body.appendChild(printArea);
-    }
-
-    window.print();
-    setTimeout(() => {
-      if (document.body.contains(printArea)) {
-        printArea.remove();
-      }
-    }, 500);
+    openPrintWindow({
+      title: 'Diagnóstico y Tratamiento',
+      orientation: 'landscape',
+      content,
+      styles: `
+        .recipe-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); width: 100%; min-height: 190mm; }
+        .recipe-half { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 190mm; padding: 0 10px 8px; }
+        .recipe-half + .recipe-half { border-left: 1px solid #000; }
+        .recipe-header { display: flex; align-items: flex-start; gap: 8px; min-height: 54px; padding-bottom: 7px; border-bottom: 1px solid #000; text-align: center; line-height: 1.25; }
+        .recipe-header img { width: 48px; height: 48px; object-fit: contain; flex: 0 0 48px; }
+        .recipe-header div { flex: 1; }
+        h2 { margin: 10px 0 8px; text-align: center; font-size: 11pt; }
+        .recipe-patient { line-height: 1.4; }
+        .recipe-content { flex: 1; margin-top: 12px; text-align: justify; white-space: normal; line-height: 1.45; }
+        .recipe-footer { margin-top: auto; padding-top: 10px; border-top: 1px solid #000; text-align: center; font-size: 9pt; line-height: 1.25; }
+        @page { size: Letter landscape; margin: 10mm; }
+      `
+    });
   };
 
   if (!paciente) return <div style={{ padding: '20px' }}>Cargando expediente...</div>;

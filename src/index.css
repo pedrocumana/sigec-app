@@ -149,29 +149,7 @@ tbody tr:hover { background: var(--surface-2); }
   #print-area, #print-area *, #print-recipe-area, #print-recipe-area *, #print-informe-area, #print-informe-area *, #print-contabilidad-area, #print-contabilidad-area * { visibility: visible; }
   /* Orientación vertical predeterminada para todas las impresiones comunes. */
   @page { size: Letter portrait; margin: 10mm; }
-  #print-area, #print-recipe-area, #print-informe-area, #print-contabilidad-area { display: block; position: absolute; top: 0; left: 0; width: 100%; padding: 0; margin: 0; }
-  #print-recipe-area { font-family: Arial, sans-serif; font-size: 9pt; color: #000; }
-  #print-recipe-area .recipe-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); width: 100%; height: 170mm; }
-  #print-recipe-area .recipe-half { position: relative; display: flex; flex-direction: column; min-width: 0; height: 170mm; padding: 0 10px 8px; overflow: hidden; }
-  #print-recipe-area .recipe-half + .recipe-half { border-left: 1px solid #000; }
-  #print-recipe-area .recipe-header { display: flex; align-items: flex-start; gap: 8px; min-height: 54px; padding-bottom: 7px; border-bottom: 1px solid #000; text-align: center; line-height: 1.25; }
-  #print-recipe-area .recipe-header img { width: 48px; height: 48px; object-fit: contain; flex: 0 0 48px; }
-  #print-recipe-area .recipe-header div { flex: 1; }
-  #print-recipe-area h2 { font-family: Arial, sans-serif; font-size: 11pt; text-align: center; margin: 10px 0 8px; color: #000; }
-  #print-recipe-area .recipe-patient { line-height: 1.4; }
-  #print-recipe-area .recipe-content { flex: 1; text-align: justify; white-space: normal; line-height: 1.45; margin-top: 12px; }
-  #print-recipe-area .recipe-footer { margin-top: auto; padding-top: 10px; border-top: 1px solid #000; text-align: center; font-size: 9pt; line-height: 1.25; }
-  #print-recipe-area { page: recipe; }
-  @page recipe { size: Letter landscape; margin: 10mm; }
-  #print-informe-area { page: report; font-family: Arial, sans-serif; font-size: 12pt; color: #000; }
-  @page report { size: Letter portrait; margin: 10mm; }
-  #print-informe-area .informe-header { display: flex; align-items: center; gap: 12px; text-align: center; font-size: 8pt; line-height: 1.15; padding-bottom: 8px; border-bottom: 1px solid #000; }
-  #print-informe-area .informe-header img { width: 68px; height: 68px; object-fit: contain; display: block; flex: 0 0 68px; margin: 0; }
-  #print-informe-area .informe-header-copy { flex: 1; min-width: 0; }
-  #print-informe-area .informe-meta { margin-top: 24px; line-height: 1.6; }
-  #print-informe-area h1 { font-family: Arial, sans-serif; font-size: 16pt; text-align: center; margin: 28px 0 24px; color: #000; }
-  #print-informe-area .informe-body { text-align: justify; line-height: 1.6; min-height: 420px; white-space: normal; }
-  #print-informe-area .informe-footer { text-align: center; line-height: 1.3; margin-top: 8px; page-break-inside: avoid; }
+  #print-area, #print-contabilidad-area { display: block; position: absolute; top: 0; left: 0; width: 100%; padding: 0; margin: 0; }
   @page accounting { size: Letter portrait; margin: 12mm; }
   #print-contabilidad-area { page: accounting; font-family: Arial, sans-serif; font-size: 9pt; line-height: 1.35; color: #000; }
   #print-contabilidad-area .contabilidad-header { display: flex; align-items: center; justify-content: center; gap: 14px; padding-bottom: 10px; border-bottom: 1px solid #222; text-align: center; }
