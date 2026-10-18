@@ -16,6 +16,12 @@ function openPrintWindow({ title, orientation, content, styles }) {
     return;
   }
 
+  const pageSize = orientation === 'landscape' ? '11in 8.5in' : '8.5in 11in';
+
+  printWindow.onafterprint = () => {
+    printWindow.close();
+  };
+
   printWindow.document.open();
   printWindow.document.write(`<!doctype html>
     <html lang="es">
@@ -24,7 +30,7 @@ function openPrintWindow({ title, orientation, content, styles }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>${title}</title>
         <style>
-          @page { size: Letter ${orientation}; margin: 10mm; }
+          @page { size: ${pageSize}; margin: 10mm; }
           * { box-sizing: border-box; }
           html, body { margin: 0; padding: 0; color: #000; font-family: Arial, sans-serif; }
           ${styles}
@@ -37,12 +43,12 @@ function openPrintWindow({ title, orientation, content, styles }) {
     </html>`);
   printWindow.document.close();
 
-  Promise.all(
-    Array.from(printWindow.document.images, (image) => image.decode().catch(() => undefined))
-  ).then(() => {
+  Promise.all([
+    printWindow.document.fonts?.ready,
+    ...Array.from(printWindow.document.images, (image) => image.decode().catch(() => undefined))
+  ]).then(() => {
     printWindow.focus();
     printWindow.print();
-    printWindow.close();
   });
 }
 
@@ -240,9 +246,9 @@ export default function PacienteDetalle() {
       orientation: 'portrait',
       content,
       styles: `
-        .informe-header { display: flex; align-items: center; justify-content: flex-start; gap: 14px; padding-bottom: 8px; border-bottom: 1px solid #000; text-align: left; font-size: 8pt; line-height: 1.2; }
-        .informe-header img { display: block; flex: 0 0 90px; width: 90px; height: 90px; object-fit: contain; }
-        .informe-header-copy { flex: 1; min-width: 0; }
+        .informe-header { display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: flex-start !important; gap: 16px; padding-bottom: 8px; border-bottom: 1px solid #000; text-align: left !important; font-size: 8pt; line-height: 1.2; }
+        .informe-header img { display: block; order: 0; flex: 0 0 110px; width: 110px; height: 110px; margin: 0; object-fit: contain; }
+        .informe-header-copy { order: 1; flex: 1; min-width: 0; text-align: left !important; }
         .informe-meta { margin-top: 24px; line-height: 1.6; }
         h1 { margin: 28px 0 24px; text-align: center; font-size: 16pt; }
         .informe-body { min-height: 420px; text-align: justify; line-height: 1.6; }
@@ -386,7 +392,7 @@ export default function PacienteDetalle() {
     `;
     const recipeHeader = `
       <div class="recipe-header">
-        <img src="/logo_clinicasp26.jpg" alt="Clínica San Pedro" />
+        <img src="${logoUrl}" alt="Clínica San Pedro" />
         <div>
           <div>Dr. LEONEL FERNANDEZ</div>
           <div>MEDICINA INTERNA - MEDICINA DE OBESIDAD</div>
@@ -425,14 +431,13 @@ export default function PacienteDetalle() {
         .recipe-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); width: 100%; min-height: 190mm; }
         .recipe-half { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 190mm; padding: 0 10px 8px; }
         .recipe-half + .recipe-half { border-left: 1px solid #000; }
-        .recipe-header { display: flex; align-items: flex-start; gap: 8px; min-height: 54px; padding-bottom: 7px; border-bottom: 1px solid #000; text-align: center; line-height: 1.25; }
-        .recipe-header img { width: 48px; height: 48px; object-fit: contain; flex: 0 0 48px; }
+        .recipe-header { display: flex !important; flex-direction: row !important; align-items: flex-start; gap: 8px; min-height: 54px; padding-bottom: 7px; border-bottom: 1px solid #000; text-align: center; line-height: 1.25; }
+        .recipe-header img { display: block; width: 48px; height: 48px; margin: 0; object-fit: contain; flex: 0 0 48px; }
         .recipe-header div { flex: 1; }
         h2 { margin: 10px 0 8px; text-align: center; font-size: 11pt; }
         .recipe-patient { line-height: 1.4; }
         .recipe-content { flex: 1; margin-top: 12px; text-align: justify; white-space: normal; line-height: 1.45; }
         .recipe-footer { margin-top: auto; padding-top: 10px; border-top: 1px solid #000; text-align: center; font-size: 9pt; line-height: 1.25; }
-        @page { size: Letter landscape; margin: 10mm; }
       `
     });
   };
