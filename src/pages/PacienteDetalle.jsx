@@ -405,22 +405,34 @@ export default function PacienteDetalle() {
     const recipeFooter = '<div class="recipe-footer">telf: 0412-0864084 -- Instagram: dr.leoferinternista -- tiktok: leonelfernandezgonzalez1</div>';
 
     const content = `
-      <div class="recipe-columns">
-        <section class="recipe-half">
-          ${recipeHeader}
-          <h2>DIAGNÓSTICO</h2>
-          ${patientData}
-          <div class="recipe-content">${escapeHtml(pl.plan || '—').replace(/\n/g, '<br />')}</div>
-          ${recipeFooter}
-        </section>
-        <section class="recipe-half">
-          ${recipeHeader}
-          <h2>TRATAMIENTO</h2>
-          ${patientData}
-          <div class="recipe-content">${escapeHtml(pl.tratamiento || '—').replace(/\n/g, '<br />')}</div>
-          ${recipeFooter}
-        </section>
-      </div>
+      <table class="recipe-table">
+        <thead>
+          <tr>
+            <th>
+              ${recipeHeader}
+              <h2>DIAGNÓSTICO</h2>
+              ${patientData}
+            </th>
+            <th>
+              ${recipeHeader}
+              <h2>TRATAMIENTO</h2>
+              ${patientData}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="recipe-content">${escapeHtml(pl.plan || '—').replace(/\n/g, '<br />')}</div></td>
+            <td><div class="recipe-content">${escapeHtml(pl.tratamiento || '—').replace(/\n/g, '<br />')}</div></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>${recipeFooter}</td>
+            <td>${recipeFooter}</td>
+          </tr>
+        </tfoot>
+      </table>
     `;
 
     openPrintWindow({
@@ -428,16 +440,20 @@ export default function PacienteDetalle() {
       orientation: 'landscape',
       content,
       styles: `
-        .recipe-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); width: 100%; min-height: 190mm; }
-        .recipe-half { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 190mm; padding: 0 10px 8px; }
-        .recipe-half + .recipe-half { border-left: 1px solid #000; }
-        .recipe-header { display: flex !important; flex-direction: row !important; align-items: flex-start; gap: 8px; min-height: 54px; padding-bottom: 7px; border-bottom: 1px solid #000; text-align: center; line-height: 1.25; }
+        .recipe-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 11pt; }
+        .recipe-table thead { display: table-header-group; }
+        .recipe-table tfoot { display: table-footer-group; }
+        .recipe-table th, .recipe-table td { width: 50%; padding: 0 10px; vertical-align: top; text-align: left; font-weight: 400; }
+        .recipe-table th + th, .recipe-table td + td { border-left: 1px solid #000; }
+        .recipe-table tbody { display: table-row-group; }
+        .recipe-table tbody tr, .recipe-table tbody td { break-inside: auto; page-break-inside: auto; }
+        .recipe-header { display: flex !important; flex-direction: row !important; align-items: flex-start; gap: 8px; min-height: 54px; padding-bottom: 7px; border-bottom: 1px solid #000; text-align: center; font-size: 11pt; line-height: 1.25; }
         .recipe-header img { display: block; width: 48px; height: 48px; margin: 0; object-fit: contain; flex: 0 0 48px; }
-        .recipe-header div { flex: 1; }
-        h2 { margin: 10px 0 8px; text-align: center; font-size: 11pt; }
+        .recipe-header > div { flex: 1; }
+        h2 { margin: 8px 0 6px; text-align: center; font-size: 10pt; }
         .recipe-patient { line-height: 1.4; }
-        .recipe-content { flex: 1; margin-top: 12px; text-align: justify; white-space: normal; line-height: 1.45; }
-        .recipe-footer { margin-top: auto; padding-top: 10px; border-top: 1px solid #000; text-align: center; font-size: 9pt; line-height: 1.25; }
+        .recipe-content { margin-top: 8px; text-align: justify; white-space: normal; overflow-wrap: anywhere; font-size: 11pt; line-height: 1.4; }
+        .recipe-footer { padding-top: 8px; border-top: 1px solid #000; text-align: center; font-size: 8pt; line-height: 1.2; }
       `
     });
   };
