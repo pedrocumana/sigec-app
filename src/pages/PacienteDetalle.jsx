@@ -452,7 +452,7 @@ export default function PacienteDetalle() {
         .recipe-header > div { flex: 1; }
         h2 { margin: 8px 0 6px; text-align: center; font-size: 10pt; }
         .recipe-patient { line-height: 1.4; }
-        .recipe-content { margin-top: 8px; text-align: justify; white-space: normal; overflow-wrap: anywhere; font-size: 11pt; line-height: 1.4; }
+        .recipe-content { margin-top: 8px; text-align: justify; white-space: normal; overflow-wrap: anywhere; font-size: 10pt; line-height: 1.4; }
         .recipe-footer { padding-top: 8px; border-top: 1px solid #000; text-align: center; font-size: 8pt; line-height: 1.2; }
       `
     });
